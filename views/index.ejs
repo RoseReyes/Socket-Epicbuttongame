@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Button Game</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type ="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type ="text/javascript">
+        $(document). ready(function (){
+            var socket = io(); //1 establish the connection from the client's browser to the server
+
+            $('.count').on("click", function(){ //3 //Trigger the counter in the server
+                socket.emit('countbtn');
+            })
+
+            //Grabs the counter value that was passed from the server
+            socket.on('countbtn', function(data) { //4
+                let new_list = $('.divcounter').html(data.btncount);
+                 console.log(data);
+            })
+            
+            //Reset the counter to 0;
+            $('.reset').on("click", function() {
+                socket.emit('resetbtn');
+            })
+
+            socket.on('resetbtn', function(data) {
+                let new_list = $('.divcounter').html(data.zerocount);
+                console.log(data);  
+            })
+
+        })
+    </script>
+</head>
+<body>
+    <div class="container ">
+        <div class="row justify-content-md-center mt-5 text-dark">
+            <h1>The button has been pushed <span class="divcounter">0</span> time(s)</h1>
+            <div class="col-md-12 text-center mt-5">
+                <h6>Push the button to update the count!</h6>
+                <button type="button" class="btn btn-primary btn-lg count">Push the epic button</button>
+            </div>
+            <div class="col-md-12 text-center mt-5">
+                <button type="button" class="btn btn-danger btn-sm text-center reset">Reset count</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
